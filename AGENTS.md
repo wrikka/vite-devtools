@@ -49,7 +49,9 @@ to an agent CLI. Agents must be able to follow this file end to end without gues
 - `bun run playground` — build, then serve `examples/playground` on `:5199`
   → hub `http://localhost:5199/__devtools/`
 - `bun run typecheck` — `bun check` over `src` + the build configs
-- `bun test` — the Bun test suite (`src/**/*.test.ts`); run it with the typecheck before every commit
+- `bun test` — the Bun test suite (`test/unit` + `test/contract`); run it with the typecheck before every commit
+- `bun run check:deps` — `scripts/check-deps.ts` enforces the Clean Architecture import direction
+  (`contracts`/`config` leaf ← `core` ← `modules` ← `infra` ← `app`; `ui` reaches only `contracts`/`config`/`core`)
 - Moon (moonrepo, `.moon/workspace.yml` projects: `.` = `wrikka-vite-devtools`, `examples/*`, `packages/*`):
   `bunx moon run <project>:<task>` — e.g. `wrikka-vite-devtools:verify`, `playground:dev`
   (depends on `wrikka-vite-devtools:build`), `browser-extension:build|typecheck|package`;
@@ -121,7 +123,7 @@ to an agent CLI. Agents must be able to follow this file end to end without gues
 
 ### 4. Verify A Change
 
-1. `bun run build && bun run typecheck && bun test` — all three must be clean.
+1. `bun run build && bun run typecheck && bun test && bun run check:deps` — all four must be clean.
 2. `bun run playground`, then in the browser: click the bottom-left icon → type `@` and pick a route →
    add a skill or capture → submit → the hub **Comments** tab shows the run streaming → status flips
    to `done`/`failed`. Check the icon clears the 40 px dock rail and the `@` list filters as you type.
@@ -195,6 +197,6 @@ to an agent CLI. Agents must be able to follow this file end to end without gues
 ## Expected Outcome
 
 - A host project gets hub + add-ons + MCP + overlay from one plugin line
-- `bun run build`, `bun run typecheck` and `bun test` pass; playground shows a full comment→agent→done loop
+- `bun run build`, `bun run typecheck`, `bun test` and `bun run check:deps` pass; playground shows a full comment→agent→done loop
 - `USAGE.md`, `README.md` and the root skills `/use-wrikka-vite-devtools` + `/update-wrikka-vite-devtools` match the real option and RPC surface
 - Preview release published through pkg.pr.new and consumed by the host app
