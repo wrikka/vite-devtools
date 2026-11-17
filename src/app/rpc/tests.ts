@@ -29,6 +29,7 @@ export const listTests = defineRpcFunction({
 export const runTest = defineRpcFunction({
   name: 'run-test',
   type: 'action',
+  jsonSerializable: true,
   agent: {
     description: 'Run a single test file with the project runner (bun test / vitest / jest / node --test) and return its output',
   },

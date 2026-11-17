@@ -15,6 +15,7 @@ const DirEntrySchema = z.object({
 export const getMeta = defineRpcFunction({
   name: 'get-meta',
   type: 'static',
+  jsonSerializable: true,
   args: [],
   agent: { description: 'Get tool name, version, platform and server working directory' },
   returns: z.object({
