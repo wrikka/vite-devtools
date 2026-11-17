@@ -2,7 +2,7 @@ import { describe, expect, it } from 'bun:test'
 import { readdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
-const RPC_DIR = join(import.meta.dirname, '..', 'src', 'app', 'rpc')
+const RPC_DIR = join(import.meta.dirname, '..', '..', 'src', 'app', 'rpc')
 
 interface RpcDef {
   file: string

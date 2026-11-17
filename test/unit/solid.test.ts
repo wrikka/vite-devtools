@@ -10,7 +10,7 @@ import {
   unownedSignals,
   type SolidOwnerLike,
   type SolidSetupLike,
-} from '../src/ui/client/solid'
+} from '../../src/ui/client/solid'
 
 const root: SolidOwnerLike = { name: 'App', componentName: 'App', value: () => {}, owned: [1, 2] }
 const child: SolidOwnerLike = { name: 'effect-1', value: () => {}, owner: root, sources: [1] }
