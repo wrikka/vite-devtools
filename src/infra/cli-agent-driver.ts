@@ -1,7 +1,6 @@
 import { spawn, spawnSync } from 'node:child_process'
-
-export type AgentDriver = 'claude' | 'codex' | 'opencode'
-export type DriverPreference = 'auto' | AgentDriver
+import type { AgentDriver, DriverPreference } from '../contracts/agents'
+import type { AgentDriverPort, RunOptions, RunResult } from '../modules/agents'
 
 const DRIVERS: AgentDriver[] = ['claude', 'codex', 'opencode']
 
@@ -45,20 +44,6 @@ function driverArgs(driver: AgentDriver): string[] {
     case 'opencode':
       return ['run']
   }
-}
-
-export interface RunOptions {
-  cwd: string
-  onChunk?: (text: string) => void
-  signal?: AbortSignal
-  timeoutMs?: number
-}
-
-export interface RunResult {
-  ok: boolean
-  output: string
-  exitCode: number | null
-  error?: string
 }
 
 function extractClaudeResult(raw: string): string {
@@ -120,4 +105,11 @@ export function lastSummary(output: string): string {
   if (match?.[1]) return match[1].trim().slice(0, 500)
   const tail = output.trim().slice(-500)
   return tail || '(no output)'
+}
+
+export const cliAgentDriver: AgentDriverPort = {
+  detect: detectDrivers,
+  pick: pickDriver,
+  run: runOnce,
+  summarize: lastSummary,
 }

@@ -1,8 +1,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import type { Comment } from '../contracts/protocol'
-
-export type SyncSink = (items: Comment[]) => void
+import type { CommentStore, SyncSink } from '../core/ports/comment-store'
 
 const MAX_ITEMS = 200
 
@@ -11,7 +10,7 @@ const MAX_ITEMS = 200
  * devframe shared state (via `onSync`) and persisted to `comments.json` under
  * the devframe project storage dir.
  */
-export class CommentStore {
+export class FsCommentStore implements CommentStore {
   private items: Comment[] = []
   private sinks: SyncSink[] = []
   private writeTimer: NodeJS.Timeout | undefined

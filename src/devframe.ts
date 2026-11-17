@@ -2,7 +2,8 @@ import { homedir } from 'node:os'
 import { join, resolve } from 'node:path'
 import { defineDevframe } from 'devframe'
 import pkg from '../package.json'
-import { CommentStore } from './infra/fs-comment-store'
+import { FsCommentStore } from './infra/fs-comment-store'
+import { cliAgentDriver } from './infra/cli-agent-driver'
 import { createAgentRpc } from './app/rpc/agents'
 import { auditBundle } from './app/rpc/bundle'
 import { createCaptureRpc } from './app/rpc/capture'
@@ -24,7 +25,7 @@ import { listTests, runTest } from './app/rpc/tests'
 import { auditTheme } from './app/rpc/theme-audit'
 import { roleFromEnv, setRole } from './core/access'
 import type { Role } from './contracts/protocol'
-import type { DriverPreference } from './infra/cli-agent-driver'
+import type { DriverPreference } from './contracts/agents'
 
 const clientAssets = resolve(import.meta.dirname, 'client')
 const overlayScript = resolve(import.meta.dirname, 'overlay/index.mjs')
@@ -91,7 +92,7 @@ export function createDevframeDefinition(options: DevframeOptions = {}) {
       us.rpc.register(scanDir)
 
       const storageDir = ctx.host.getStorageDir('project')
-      const store = new CommentStore(storageDir)
+      const store = new FsCommentStore(storageDir)
       await store.load()
       const state = await us.rpc.sharedState('comments', { initialValue: { items: store.all() } })
       store.onSync((items) => state.mutate((draft) => void (draft.items = items)))
@@ -100,7 +101,7 @@ export function createDevframeDefinition(options: DevframeOptions = {}) {
         replayWindow: 4096,
         closedStreamRetention: 5 * 60_000,
       })
-      const agents = createAgentRpc({ store, channel, preference })
+      const agents = createAgentRpc({ store, channel, preference, driver: cliAgentDriver })
       const comments = createCommentRpc({
         store,
         onNew: (comment) => {
