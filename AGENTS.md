@@ -37,7 +37,7 @@ to an agent CLI. Agents must be able to follow this file end to end without gues
    `wrikka/packages` at `packages/plugins/vite-devtools` (GitHub: `wrikka/vite-devtools`), so commit
    here first, then bump the gitlink in the parent.
 2. For mount/verify work in a host project use `/use-wrikka-vite-devtools`; for work on this repo itself use `/update-wrikka-vite-devtools`.
-3. Read `src/protocol.ts` before touching any RPC — schemas there are the single source of truth for
+3. Read `src/contracts/protocol.ts` before touching any RPC — schemas there are the single source of truth for
    both the server handlers and the overlay's plain-TS mirror (`src/overlay/api.ts`).
 
 ### 2. Run Commands
@@ -61,13 +61,20 @@ to an agent CLI. Agents must be able to follow this file end to end without gues
 
 ### 3. Follow Architecture
 
-1. Layering: `vite.ts` (public plugin + options) → `add-ons.ts` (plugin keys, add-on factories,
-   the `unocss` dock) → `devframe.ts` (definition + RPC wiring) → `rpc/*` (one file per bounded
-   context) → `agent-runner.ts` / `comment-store.ts` / `prompts.ts` (infrastructure). `index.ts` is
-   the only barrel. Browser code shared by the overlay and the hub client lives in `src/ui/`
-   (components, `bits.ts` class tokens, `api.ts` panel contract, `connect.ts` panel bridge) —
-   `src/overlay/ui/` holds only the in-page chrome (`App`, `Panel`, `Pill`, `Pins`,
-   `QuickComposer`) plus `collectors.ts` for the element/framework snapshot.
+1. Architecture (Clean): dependency direction is `contracts/` + `config/` (leaf) ← `core/`
+   (shared kernel: `access`, `prompts`, `paths`, `ports/` interfaces) ← `modules/<context>/`
+   (`domain/` pure logic + `usecases/` functions taking deps) ← `infra/` (IO adapters:
+   `fs-*` stores, `cli-agent-driver`, `node-project-fs`, `process-test-runner`,
+   `local-page-fetcher`, `vite-server-context`, `scanners/`) ← `app/` (composition +
+   delivery: `devframe.ts` wiring, `rpc/*` thin handlers, `mcp.ts`, `ssr-inject.ts`,
+   `html-stream.ts`, `vite.ts`/`add-ons.ts`/`index.ts` entries). Modules: `comments`,
+   `agents`, `ideas`, `scans`, `audits`, `capture`, `runtime`. Use cases never import
+   `node:fs`/`vite`/`devframe`; ports exist only where IO is volatile or test-substituted.
+   `index.ts` is the only barrel. Browser code shared by the overlay and the hub client
+   lives in `src/ui/` (components, `bits.ts` class tokens, `api.ts` panel contract,
+   `connect.ts` panel bridge) — `src/overlay/ui/` holds only the in-page chrome (`App`,
+   `Panel`, `Pill`, `Pins`, `QuickComposer`) plus `collectors.ts` for the element/framework
+   snapshot.
 2. Client injection has two paths: the hub's `transformIndexHtml` (file-backed `index.html` only)
    and `ssr-inject.ts` — a dev-only middleware whose stream patching lives in `html-stream.ts`
    (`hookHtmlResponse`) and inserts `<base>embedded.js` before the first `</body>` of a streamed
@@ -101,7 +108,7 @@ to an agent CLI. Agents must be able to follow this file end to end without gues
 6. New option surface goes through `UseWrikkaViteDevtoolsOptions` → `DevframeOptions`; keep both JSDoc'd, they
    are copied into `README.md` / `USAGE.md` tables. `role` (`'operator' | 'viewer'`, default from
    `WRIKKA_DEVTOOLS_ROLE`) is resolved once in `createDevframeDefinition` via `setRole`; every
-   mutating RPC calls `assertCan` from `src/rpc/access.ts` and `get-meta` reports the role plus
+   mutating RPC calls `assertCan` from `src/core/access.ts` and `get-meta` reports the role plus
    `capabilities`, which the overlay and the client use to disable writes.
 7. Dock panels are one client SPA: `src/client/main.tsx` switches on `location.hash` and
    `registerPanelDocks` frames each at `${frameBase}#/<id>`, so the hash must equal the dock id
@@ -168,7 +175,7 @@ to an agent CLI. Agents must be able to follow this file end to end without gues
 
 ### 3. Code Conventions
 
-- Files ≤250 lines, one responsibility each; a new RPC context gets its own `src/rpc/<context>.ts`
+- Files ≤250 lines, one responsibility each; a new RPC context gets its own `src/app/rpc/<context>.ts`
   factory returning `{ deps }`-closed functions, registered in `devframe.ts`
 - Every RPC sets `jsonSerializable: true`, an `agent.description`, and zod `args`/`returns`
 - No speculative public surface: an exported symbol needs a consumer in `src/`, `examples/`, or docs
@@ -178,7 +185,7 @@ to an agent CLI. Agents must be able to follow this file end to end without gues
 ### 4. Safety
 
 - `auth: false` disables the OTP gate — localhost single-user only, never on a shared machine
-- Agent runs use `process.cwd()` of the dev server; keep prompts in `prompts.ts` so the exact
+- Agent runs use `process.cwd()` of the dev server; keep prompts in `src/core/prompts.ts` so the exact
   instruction sent to a CLI is reviewable in one place
 - Capture and comments are written under the hub storage dir; do not move them into the host app's
   source tree
