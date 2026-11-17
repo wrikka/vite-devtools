@@ -2,7 +2,7 @@ import { afterAll, describe, expect, it } from 'bun:test'
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { projectContext } from '../src/rpc/context'
+import { projectContext } from '../src/infra/vite-server-context'
 import {
   arbitraryIsColor,
   classifyColorUtility,
@@ -10,7 +10,7 @@ import {
   paletteModules,
   themeTokens,
 } from '../src/rpc/theme-audit'
-import type { SourceFile } from '../src/rpc/scan'
+import type { SourceFile } from '../src/infra/scanners/source-scanner'
 
 const TOKENS = new Set(['surface', 'surface-raised', 'ink', 'ink-muted', 'accent', 'accent-soft'])
 

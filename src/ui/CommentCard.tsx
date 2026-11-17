@@ -1,5 +1,5 @@
 import { For, Show, createEffect } from 'solid-js'
-import type { Comment } from '../protocol'
+import type { Comment } from '../contracts/protocol'
 import { btn, card, chip, hint, link, row, statusPill } from './bits'
 
 /** A colored left edge so a long list reads by status at a glance. */

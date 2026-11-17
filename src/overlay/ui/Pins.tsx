@@ -1,5 +1,5 @@
 import { For, Show, createEffect, createMemo, createSignal, onCleanup, onMount } from 'solid-js'
-import type { Comment } from '../../protocol'
+import type { Comment } from '../../contracts/protocol'
 import { findTarget, pagePins } from '../anchor'
 import { hint, statusPill } from '../../ui/bits'
 import { CloseIcon } from './icons'

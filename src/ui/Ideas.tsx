@@ -1,5 +1,5 @@
 import { For, Show, createSignal } from 'solid-js'
-import type { Idea } from '../protocol'
+import type { Idea } from '../contracts/protocol'
 import type { PanelApi } from './api'
 import { btnPrimary, card, empty, field, hint, row, tonePill, type Tone } from './bits'
 

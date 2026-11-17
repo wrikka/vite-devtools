@@ -1,9 +1,9 @@
 import { defineRpcFunction } from 'devframe'
 import { z } from 'zod'
-import type { CommentStore } from '../comment-store'
-import type { Comment } from '../protocol'
-import { CommentSchema, SelectionSchema } from '../protocol'
-import { assertCan } from './access'
+import type { CommentStore } from '../infra/fs-comment-store'
+import type { Comment } from '../contracts/protocol'
+import { CommentSchema, SelectionSchema } from '../contracts/protocol'
+import { assertCan } from '../core/access'
 
 const SubmitSchema = z.object({
   body: z.string().min(1).max(8000),

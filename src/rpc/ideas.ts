@@ -1,9 +1,9 @@
 import { defineRpcFunction } from 'devframe'
 import { z } from 'zod'
-import type { AgentDriver, DriverPreference } from '../agent-runner'
-import { pickDriver, runOnce } from '../agent-runner'
+import type { AgentDriver, DriverPreference } from '../infra/cli-agent-driver'
+import { pickDriver, runOnce } from '../infra/cli-agent-driver'
 import { buildIdeasPrompt, parseIdeas } from '../prompts'
-import { IdeaSchema } from '../protocol'
+import { IdeaSchema } from '../contracts/protocol'
 
 export interface IdeasRpcDeps {
   preference: DriverPreference

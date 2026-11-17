@@ -1,5 +1,5 @@
 import { For, Show, createEffect, createMemo, createSignal, onCleanup } from 'solid-js'
-import type { Comment } from '../protocol'
+import type { Comment } from '../contracts/protocol'
 import type { PanelApi } from './api'
 import { useAccess } from './access-store'
 import CommentCard from './CommentCard'

@@ -1,5 +1,5 @@
 import { For, Show, createMemo, type VoidProps } from 'solid-js'
-import type { Selection } from '../protocol'
+import type { Selection } from '../contracts/protocol'
 import { card, field, hint, row, sectionLabel, tab, tabBar, tabOn } from '../ui/bits'
 
 export interface TargetFormProps {

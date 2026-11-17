@@ -1,7 +1,7 @@
 import { toPng } from 'html-to-image'
 
 export type { PanelApi } from '../ui/api'
-export type { Comment, Idea, Selection } from '../protocol'
+export type { Comment, Idea, Selection } from '../contracts/protocol'
 
 /** One `search-source` hit — mirrors the RPC zod return shape without pulling zod into the bundle. */
 export interface SearchMatch {

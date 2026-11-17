@@ -1,5 +1,5 @@
 import { For, Show, createSignal, onCleanup, onMount } from 'solid-js'
-import type { Selection } from '../protocol'
+import type { Selection } from '../contracts/protocol'
 import type { PanelApi } from './api'
 import { useAccess } from './access-store'
 import { showToast } from './toast'

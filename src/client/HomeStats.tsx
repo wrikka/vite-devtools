@@ -1,5 +1,5 @@
 import { createMemo, Show } from 'solid-js'
-import type { Comment } from '../protocol'
+import type { Comment } from '../contracts/protocol'
 import { hint, panelCard, sectionLabel, type Tone } from '../ui/bits'
 import { BarList } from '../ui/charts'
 import { StatStrip, type StatItem } from './PanelKit'

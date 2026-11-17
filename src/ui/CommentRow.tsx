@@ -1,5 +1,5 @@
 import { Show } from 'solid-js'
-import type { Comment } from '../protocol'
+import type { Comment } from '../contracts/protocol'
 import { btn, hint, statusPill } from './bits'
 
 const dot: Record<string, string> = {

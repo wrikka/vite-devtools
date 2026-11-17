@@ -1,6 +1,6 @@
 import { readdir, readFile, stat } from 'node:fs/promises'
 import { join, relative, resolve, sep } from 'node:path'
-import { projectRoot } from './context'
+import { projectRoot } from '../vite-server-context'
 
 export const CODE_EXT = new Set([
   '.ts',

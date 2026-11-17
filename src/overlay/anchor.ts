@@ -1,4 +1,4 @@
-import type { Comment } from '../protocol'
+import type { Comment } from '../contracts/protocol'
 
 export function samePage(page: string): boolean {
   try {

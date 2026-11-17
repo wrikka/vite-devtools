@@ -1,5 +1,5 @@
 import { createMemo, createSignal, onMount } from 'solid-js'
-import type { Comment } from '../protocol'
+import type { Comment } from '../contracts/protocol'
 import type { PanelApi } from '../ui/api'
 import HomeDashboard from './HomeDashboard'
 import HomeInstall from './HomeInstall'

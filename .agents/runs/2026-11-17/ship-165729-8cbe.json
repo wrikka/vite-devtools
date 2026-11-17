@@ -1,0 +1,11 @@
+{
+  "$schema": "https://dot-agents.local/schemas/activity.schema.json",
+  "kind": "ship",
+  "session": null,
+  "payload": {
+    "result": "merged",
+    "branch": "main",
+    "pr": null
+  },
+  "at": "2026-11-17T16:57:29.343Z"
+}

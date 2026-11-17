@@ -1,0 +1,97 @@
+{
+  "$schema": "https://dot-agents.local/schemas/state.schema.json",
+  "schemaVersion": 1,
+  "readOnly": true,
+  "generated": "2026-11-17T16:57:30.274Z",
+  "generator": {
+    "script": "scripts/state.ts",
+    "version": "sha256:1488b684c3c3",
+    "runId": "mwkxqw0y-5eb9ee"
+  },
+  "meta": {
+    "store": "project",
+    "storeRoot": "D:\\dot-agents",
+    "workspaceRoot": "D:\\opensource\\packages\\packages\\plugins\\vite-devtools",
+    "machine": {
+      "hostname": "ASUS-GL552VX",
+      "os": "win32"
+    }
+  },
+  "events": [
+    {
+      "at": "2026-11-17T16:57:29.340Z",
+      "kind": "ship",
+      "result": "merged",
+      "branch": "main",
+      "pr": null
+    }
+  ],
+  "derived": {
+    "health": "ok",
+    "rules": {
+      "fail": [
+        "any loop.* verdict field (result|conclusion|status|verdict|worst) in fail|failure|failed|error|down"
+      ],
+      "warn": [
+        "stale blocks",
+        "undeployedCommits > 0",
+        "any loop.* verdict in warn|warning|slow",
+        "any projects.*.health == 'fail'"
+      ],
+      "ok": "default"
+    },
+    "staleBlocks": [],
+    "undeployedCommits": null,
+    "coverage": {
+      "observed": 6,
+      "expected": 6
+    },
+    "computedAt": "2026-11-17T16:57:32.207Z"
+  },
+  "session": {
+    "at": "2026-11-17T16:57:30.274Z",
+    "source": "state.ts",
+    "data": {}
+  },
+  "loop": {
+    "at": "2026-11-17T16:57:30.275Z",
+    "source": "state.ts compact events",
+    "data": {
+      "ship": {
+        "result": "merged",
+        "branch": "main",
+        "pr": null,
+        "at": "2026-11-17T16:57:29.340Z",
+        "kind": "ship"
+      }
+    }
+  },
+  "git": {
+    "at": "2026-11-17T16:57:32.206Z",
+    "source": "state.ts collect git",
+    "ttlHours": 6,
+    "data": {
+      "branch": "main",
+      "head": "551e64ab6ebe5c6afc50211574d9c7b761ac603a",
+      "upstream": "origin/main",
+      "ahead": 0,
+      "behind": 0,
+      "dirtyCount": 1,
+      "dirtyHash": "2420aeaac6ffa6f7",
+      "dirtyPaths": [
+        ".agents/"
+      ],
+      "lastCommit": {
+        "commit": "551e64a",
+        "subject": "docs: fix pkg.pr.new URL to include package name segment",
+        "at": "2026-11-17T23:47:06+07:00"
+      }
+    }
+  },
+  "catalog": {
+    "at": "2026-11-17T16:57:32.207Z",
+    "source": "state.ts collect catalog",
+    "ttlHours": 24,
+    "data": {}
+  }
+}

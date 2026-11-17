@@ -1,5 +1,5 @@
 import { For, Show, createEffect, createMemo, createSignal, type JSX } from 'solid-js'
-import type { Idea, Selection } from '../protocol'
+import type { Idea, Selection } from '../contracts/protocol'
 import type { PanelApi } from '../ui/api'
 import { chip, hint, tab, tabBar, tabOn } from '../ui/bits'
 import Composer from '../ui/Composer'

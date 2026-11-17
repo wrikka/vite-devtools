@@ -1,5 +1,5 @@
 import { For, Show } from 'solid-js'
-import type { Comment } from '../../protocol'
+import type { Comment } from '../../contracts/protocol'
 import { btn, chip, hint, statusPill } from '../../ui/bits'
 import { copyText, showToast } from '../../ui/toast'
 import { AgentIcon, CopyIcon } from './icons'

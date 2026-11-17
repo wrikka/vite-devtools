@@ -2,8 +2,8 @@ import { readdir, readFile, stat } from 'node:fs/promises'
 import { join } from 'node:path'
 import { defineRpcFunction } from 'devframe'
 import { z } from 'zod'
-import { projectRoot } from './context'
-import { scanSource } from './scan'
+import { projectRoot } from '../infra/vite-server-context'
+import { scanSource } from '../infra/scanners/source-scanner'
 
 /** Vite's own `import.meta.env` members; never report these as user variables. */
 const BUILTIN = new Set(['MODE', 'DEV', 'PROD', 'SSR', 'BASE_URL', 'MODE'])

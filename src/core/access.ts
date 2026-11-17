@@ -1,4 +1,4 @@
-import type { Role } from '../protocol'
+import type { Role } from '../contracts/protocol'
 
 /**
  * Capabilities a role holds. The devtools run on a developer's machine, so the

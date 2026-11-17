@@ -1,5 +1,5 @@
 import { createSignal } from 'solid-js'
-import type { Selection } from '../protocol'
+import type { Selection } from '../contracts/protocol'
 import type { PanelApi } from './api'
 import { btnPrimary, field, hint, row } from './bits'
 

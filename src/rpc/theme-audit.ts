@@ -2,8 +2,8 @@ import { readFile, stat } from 'node:fs/promises'
 import { dirname, join, resolve } from 'node:path'
 import { defineRpcFunction } from 'devframe'
 import { z } from 'zod'
-import { projectRoot } from './context'
-import { CODE_EXT, relFromRoot, scanSource, type SourceFile } from './scan'
+import { projectRoot } from '../infra/vite-server-context'
+import { CODE_EXT, relFromRoot, scanSource, type SourceFile } from '../infra/scanners/source-scanner'
 
 const COLOR_UTILITY =
   /^(bg|text|border|ring|fill|stroke|from|via|to|outline|divide|decoration|placeholder|caret|accent|shadow)-(.+)$/

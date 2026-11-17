@@ -4,4 +4,4 @@ export type { DevframeOptions, UseWrikkaViteDevtoolsAgentOptions } from './devfr
 export { useWrikkaViteDevtools, default } from './vite'
 export type { UseWrikkaViteDevtoolsOptions, UseWrikkaViteDevtoolsPluginKey } from './vite'
 export { getMeta, scanDir } from './rpc'
-export type { Selection, Comment, CommentsState, Idea } from './protocol'
+export type { Selection, Comment, CommentsState, Idea } from './contracts/protocol'

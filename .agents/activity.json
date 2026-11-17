@@ -1,0 +1,22 @@
+{
+  "$schema": "https://dot-agents.local/schemas/activity.schema.json",
+  "schemaVersion": 1,
+  "readOnly": true,
+  "generated": "2026-11-17T16:57:29.351Z",
+  "retention": {
+    "maxEvents": 500,
+    "maxAgeDays": 90,
+    "dropped": 0,
+    "archived": 0
+  },
+  "events": [
+    {
+      "at": "2026-11-17T16:57:29.340Z",
+      "kind": "ship",
+      "session": "unknown",
+      "result": "merged",
+      "branch": "main",
+      "pr": null
+    }
+  ]
+}

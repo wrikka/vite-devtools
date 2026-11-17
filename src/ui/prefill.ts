@@ -1,4 +1,4 @@
-import type { Idea } from '../protocol'
+import type { Idea } from '../contracts/protocol'
 
 /** Turns an accepted idea into the draft body the composer opens with. */
 export function ideaPrefill(idea: Idea): string {

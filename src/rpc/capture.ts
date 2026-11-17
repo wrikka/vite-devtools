@@ -2,7 +2,7 @@ import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { defineRpcFunction } from 'devframe'
 import { z } from 'zod'
-import { assertCan } from './access'
+import { assertCan } from '../core/access'
 
 const MAX_CAPTURE_BYTES = 10 * 1024 * 1024
 /** Filenames come from the client — never let them escape the captures dir. */

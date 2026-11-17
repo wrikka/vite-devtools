@@ -1,4 +1,4 @@
-import type { Comment, Idea } from './protocol'
+import type { Comment, Idea } from './contracts/protocol'
 
 export interface PromptContext {
   cwd: string

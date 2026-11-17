@@ -1,10 +1,10 @@
 import { defineRpcFunction } from 'devframe'
 import { z } from 'zod'
-import type { CommentStore } from '../comment-store'
-import type { AgentDriver, DriverPreference } from '../agent-runner'
-import { detectDrivers, lastSummary, pickDriver, runOnce } from '../agent-runner'
+import type { CommentStore } from '../infra/fs-comment-store'
+import type { AgentDriver, DriverPreference } from '../infra/cli-agent-driver'
+import { detectDrivers, lastSummary, pickDriver, runOnce } from '../infra/cli-agent-driver'
 import { buildCommentPrompt } from '../prompts'
-import { assertCan } from './access'
+import { assertCan } from '../core/access'
 
 /** Structural slice of `us.rpc.streaming.create('agent-logs')`. */
 export interface LogsStream {

@@ -1,5 +1,5 @@
 import { For, Show, createMemo, createSignal, onCleanup, onMount } from 'solid-js'
-import type { Comment } from '../protocol'
+import type { Comment } from '../contracts/protocol'
 import type { PanelApi } from '../ui/api'
 import { btn, chip, chipOn, grid, hint, row, statusPill, tile, toolbar } from '../ui/bits'
 import SendToAgent from '../ui/SendToAgent'

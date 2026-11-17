@@ -2,7 +2,7 @@ import { relative, sep } from 'node:path'
 import { gzipSync } from 'node:zlib'
 import { defineRpcFunction } from 'devframe'
 import { z } from 'zod'
-import { projectContext, projectRoot } from './context'
+import { projectContext, projectRoot } from '../infra/vite-server-context'
 
 interface GraphNode {
   id?: string | null

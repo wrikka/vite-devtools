@@ -1,6 +1,6 @@
 import { defineRpcFunction } from 'devframe'
 import { z } from 'zod'
-import { devServerOrigin } from './context'
+import { devServerOrigin } from '../infra/vite-server-context'
 import { assertLocalOrigin } from './seo'
 
 const REQUEST_TIMEOUT_MS = 10_000

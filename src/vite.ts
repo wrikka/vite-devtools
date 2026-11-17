@@ -4,7 +4,7 @@ import { viteDevframeHub } from '@devframes/vite/hub'
 import { type DevframeOptions } from './devframe'
 import { createDevframes, createDockRegistrar, resolvePluginKeys, type UseWrikkaViteDevtoolsPluginKey } from './add-ons'
 import { createSsrInjectPlugin } from './ssr-inject'
-import { projectContext } from './rpc/context'
+import { projectContext } from './infra/vite-server-context'
 
 export type { UseWrikkaViteDevtoolsPluginKey }
 

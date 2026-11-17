@@ -1,6 +1,6 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
-import type { Comment } from './protocol'
+import type { Comment } from '../contracts/protocol'
 
 export type SyncSink = (items: Comment[]) => void
 
