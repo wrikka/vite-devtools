@@ -3,7 +3,7 @@ import solid from 'vite-plugin-solid'
 import UnoCSS from 'unocss/vite'
 import { presetWind4 } from 'unocss'
 import { unoPipelineInclude } from './src/uno-pipeline.ts'
-import { themeColors } from './src/ui/theme.ts'
+import { themeColors } from './src/ui/shared/theme.ts'
 
 // The hub serves dist/overlay/index.mjs verbatim as a dock page-script, so the
 // bundle must be fully self-contained — lib mode with no externals, and the
@@ -17,7 +17,7 @@ export default defineConfig({
       theme: { colors: themeColors },
       content: {
         pipeline: { include: unoPipelineInclude },
-        filesystem: ['./src/overlay/**/*.{ts,tsx,css}', './src/ui/**/*.{ts,tsx,css}'],
+        filesystem: ['./src/ui/**/*.{ts,tsx,css}'],
       },
     }),
   ],
@@ -26,7 +26,7 @@ export default defineConfig({
     outDir: 'dist/overlay',
     emptyOutDir: true,
     cssCodeSplit: false,
-    lib: { entry: 'src/overlay/main.tsx', formats: ['es'], fileName: () => 'index.mjs' },
+    lib: { entry: 'src/ui/overlay/main.tsx', formats: ['es'], fileName: () => 'index.mjs' },
     rollupOptions: { output: { entryFileNames: 'index.mjs', codeSplitting: false } },
   },
 })

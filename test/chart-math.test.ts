@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { bucketize, gaugeDash, ratio, sparkPoints } from '../src/ui/chart-math'
+import { bucketize, gaugeDash, ratio, sparkPoints } from '../src/ui/shared/chart-math'
 
 describe('ratio', () => {
   it('clamps to the 0..1 range', () => {

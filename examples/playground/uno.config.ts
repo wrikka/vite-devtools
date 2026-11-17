@@ -1,7 +1,7 @@
 import { join } from 'node:path'
 import { defineConfig, presetWind4, transformerDirectives, transformerVariantGroup } from 'unocss'
 import { unoPipelineInclude } from '../../src/uno-pipeline'
-import { themeColors } from '../../src/ui/theme'
+import { themeColors } from '../../src/ui/shared/theme'
 
 // Same palette as the dock panels, so the playground host reads as one product.
 const files = ['index.html', 'main.ts'].map((name) =>

@@ -127,7 +127,7 @@ and runner diagnostics live in the hub panel.
 One round icon (`#wrikka-vite-devtools-overlay-host`, shadow DOM, top-layer z-index) anchored
 bottom-left at `left-14`, so it clears the hub's 40 px dock rail — it carries a status dot
 (idle / queued / running) and a badge counting `queued + running`. Clicking toggles the inline composer; `Esc` closes it and `Ctrl`/`Cmd`+`Enter` submits.
-The icon never mounts inside hub or dock documents (`src/overlay/hub.ts` → `isHubDocument`), so the
+The icon never mounts inside hub or dock documents (`src/ui/overlay/hub.ts` → `isHubDocument`), so the
 panel does not get a duplicate of itself.
 
 1. **Inline composer** → body, `comment | idea` kind, *capture page* checkbox (PNG via
@@ -139,13 +139,13 @@ panel does not get a duplicate of itself.
    inspector** — every new comment targets the page and the mentioned route (`mode: 'page'`).
 3. **Pins** → annotations for comments that still carry an element `cssPath` (for example created by
    an agent through MCP): each gets a numbered pin anchored to its element
-   (`src/overlay/ui/Pins.tsx` + `anchor.ts`). Pins follow scroll/resize, clamp to the viewport, and a
+   (`src/ui/overlay/ui/Pins.tsx` + `anchor.ts`). Pins follow scroll/resize, clamp to the viewport, and a
    click opens a bubble with the body, status pill, `mode @ cssPath` and the agent's
    `resultSummary`. The toggle hides/shows all pins.
 4. Status dot and badge refresh from the `list-comments` poll every 5 s; a viewer-role session
    disables the composer and shows a read-only notice.
 5. **Hub link** → the devframe hub at `<hubBase>`, with the current page url appended as `?page=`.
-   `src/overlay/hub.ts` derives `<hubBase>` from the module URL the hub served the icon from
+   `src/ui/overlay/hub.ts` derives `<hubBase>` from the module URL the hub served the icon from
    (`…/__page-script/index.mjs` → its parent mount, `…/wrikka-vite-devtools/` stripped), falling
    back to `/__devtools/` — so a hub mounted under a base path still links correctly.
    The glyphs are inline SVG: no Iconify request, works offline.
@@ -178,15 +178,15 @@ The same SPA is the hub **Comments** dock page (`<base>wrikka-vite-devtools/`), 
    with a banner and a toast.
 2. **New comment** → the target form (page url, mode, cssPath) then the page-agnostic composer. The
    page field is prefilled from the `?page=` link or, because the hub drops that query before it
-   mounts the dock iframe, from the url the pill stashed on this origin (`src/ui/page-stash.ts`).
+   mounts the dock iframe, from the url the pill stashed on this origin (`src/ui/shared/page-stash.ts`).
    The body and the chosen skills autosave per page (debounced 300 ms) to
-   `wrikka-vite-devtools:draft:<page>` (`src/ui/draft-stash.ts`), so a tab switch that remounts the
+   `wrikka-vite-devtools:draft:<page>` (`src/ui/shared/draft-stash.ts`), so a tab switch that remounts the
    iframe doesn't lose an unwritten comment; a successful submit clears it.
 3. **Ideas** → `generate-ideas` (optional focus text) renders selectable cards (title/detail/impact);
    **Apply** switches to **New comment** prefilled with `Implement: <title> — <detail>`.
 4. **Diagnostics** → `runner-info` (active driver + installed CLIs) and frame metadata.
 
-Framework detection (`src/overlay/frameworks.ts`) labels the page for diagnostics: Solid
+Framework detection (`src/ui/overlay/frameworks.ts`) labels the page for diagnostics: Solid
 (`_$HY`, `_$DX_DELEGATE`, `_$host`/`$signal*` marks), React (`__reactFiber$*`, `__NEXT_DATA__`), Vue
 (`__vueParentComponent`, `__VUE__`), Svelte (`svelte-<hash>`, `__SVELTEKIT_*`), Nuxt (`__NUXT__`).
 
@@ -265,16 +265,16 @@ const comment = await scope.rpc.call('submit-comment', {
 const { streamId } = await scope.rpc.call('run-agent', { commentId: comment.id })
 ```
 
-Typed ids come from `src/client/typed-rpc.d.ts` (module augmentation of
+Typed ids come from `src/ui/client/typed-rpc.d.ts` (module augmentation of
 `DevframeRpcClientFunctions`), so `scope.rpc.call('submit-comment', …)` is checked in the panel SPA.
 
-The shipped panel SPA at `<base>wrikka-vite-devtools/` (built from `src/client/`) is the hub
+The shipped panel SPA at `<base>wrikka-vite-devtools/` (built from `src/ui/client/`) is the hub
 **Comments** tab: its Inbox tab calls `runner-info`, `list-skills` and `list-comments` (polled every
 2 s), the New comment tab offers the target form + composer (kind / mode / cssPath / page /
 multi-select skills), Inbox has Re-run per comment and streams `agent-logs` into each card, and
 Ideas / Diagnostics cover `generate-ideas` and the runner state. It is styled with UnoCSS
 (`presetWind4` + variant-group and directives transformers, no shortcuts). If you rebuild
-`src/client/` yourself, keep the three build settings documented in
+`src/ui/client/` yourself, keep the three build settings documented in
 [`CONTRIBUTING.md`](CONTRIBUTING.md): explicit
 `UnoCSS(resolve(import.meta.dirname, 'uno.config.ts'))`, a `content.pipeline.include` that also
 matches plain `.ts`, and `base: './'`.

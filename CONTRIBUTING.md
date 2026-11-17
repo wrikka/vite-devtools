@@ -17,7 +17,7 @@ bun test           # Bun test suite (src/**/*.test.ts)
    `clean: true`, which **wipes `dist/`**, including the client bundle.
 2. `build:overlay` — `vite build -c vite.overlay.config.ts` bundles `dist/overlay/index.mjs`, then
    `scripts/inline-overlay-css.ts` folds the emitted stylesheet into that one file.
-3. `build:client` — `vite build src/client` outputs the frame SPA into `dist/client`.
+3. `build:client` — `vite build src/ui/client` outputs the frame SPA into `dist/client`.
 
 Rebuilding `build:pkg` after the others deletes `dist/client`, so always finish with
 `build:client` (or just run `bun run build`).
@@ -40,7 +40,7 @@ Two invariants the hub relies on — breaking either produces silent failures, n
   is why `vite.overlay.config.ts` builds lib mode with `codeSplitting: false`, and the module must
   export a callable `default`.
 - **Frame client paths are relative.** The hub serves the page under `<base><id>/`, so
-  `src/client/vite.config.ts` must keep `base: './'` (absolute `/assets` would escape the route)
+  `src/ui/client/vite.config.ts` must keep `base: './'` (absolute `/assets` would escape the route)
   and pass the config explicitly: `UnoCSS(resolve(import.meta.dirname, 'uno.config.ts'))` — the
   client has its own UnoCSS config, the app root has none.
 
@@ -54,7 +54,7 @@ application repo.
 
 - English in code, comments, and docs.
 - The frame client uses UnoCSS `presetWind4` utilities directly — no `shortcuts`.
-- Files stay ≤250 lines; split panels when they grow (see `src/ui/Inbox.tsx` → list state and
-  `src/ui/CommentCard.tsx` → one card's presentation).
+- Files stay ≤250 lines; split panels when they grow (see `src/ui/shared/Inbox.tsx` → list state and
+  `src/ui/shared/CommentCard.tsx` → one card's presentation).
 - `README.md` ships in the package (`files` in `package.json`) — update it with any user-facing
   change.

@@ -1,0 +1,11 @@
+import { defineConfig, presetWind4, transformerDirectives, transformerVariantGroup } from 'unocss'
+import { unoPipelineInclude } from '../../uno-pipeline'
+import { themeColors } from '../shared/theme'
+
+export default defineConfig({
+  // `theme` belongs to the config, not presetWind4 options: the preset ignores it silently.
+  presets: [presetWind4()],
+  theme: { colors: themeColors },
+  transformers: [transformerVariantGroup(), transformerDirectives()],
+  content: { pipeline: { include: unoPipelineInclude } },
+})

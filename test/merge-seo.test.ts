@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { mergeSeo } from '../src/client/mergeSeo'
+import { mergeSeo } from '../src/ui/client/mergeSeo'
 import type { RouteRow } from '../src/app/rpc/routes'
 import type { SeoRow } from '../src/app/rpc/seo'
 

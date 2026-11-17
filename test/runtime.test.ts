@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from 'bun:test'
-import { bool, num, percentile, str } from '../src/client/runtimeFeed'
+import { bool, num, percentile, str } from '../src/ui/client/runtimeFeed'
 import { clearEvents, pushEvents, readEvents } from '../src/app/rpc/runtime'
 
 function batch(count: number, startAt = 1) {

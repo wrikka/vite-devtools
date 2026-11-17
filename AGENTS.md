@@ -38,7 +38,7 @@ to an agent CLI. Agents must be able to follow this file end to end without gues
    here first, then bump the gitlink in the parent.
 2. For mount/verify work in a host project use `/use-wrikka-vite-devtools`; for work on this repo itself use `/update-wrikka-vite-devtools`.
 3. Read `src/contracts/protocol.ts` before touching any RPC — schemas there are the single source of truth for
-   both the server handlers and the overlay's plain-TS mirror (`src/overlay/api.ts`).
+   both the server handlers and the overlay's plain-TS mirror (`src/ui/overlay/api.ts`).
 
 ### 2. Run Commands
 
@@ -71,8 +71,8 @@ to an agent CLI. Agents must be able to follow this file end to end without gues
    `agents`, `ideas`, `scans`, `audits`, `capture`, `runtime`. Use cases never import
    `node:fs`/`vite`/`devframe`; ports exist only where IO is volatile or test-substituted.
    `index.ts` is the only barrel. Browser code shared by the overlay and the hub client
-   lives in `src/ui/` (components, `bits.ts` class tokens, `api.ts` panel contract,
-   `connect.ts` panel bridge) — `src/overlay/ui/` holds only the in-page chrome (`App`,
+   lives in `src/ui/shared/` (components, `bits.ts` class tokens, `api.ts` panel contract,
+   `connect.ts` panel bridge) — `src/ui/overlay/ui/` holds only the in-page chrome (`App`,
    `Panel`, `Pill`, `Pins`, `QuickComposer`) plus `collectors.ts` for the element/framework
    snapshot.
 2. Client injection has two paths: the hub's `transformIndexHtml` (file-backed `index.html` only)
@@ -81,13 +81,13 @@ to an agent CLI. Agents must be able to follow this file end to end without gues
    HTML response (6-byte hold-back for split tags, bail-out on non-HTML or `content-length`, dedup
    when the hub already injected). Keep the two paths idempotent against each other when touching
    either.
-3. Overlay (`src/overlay/`) is browser-only and runs as a dock page-script, UI in Solid + UnoCSS:
+3. Overlay (`src/ui/overlay/`) is browser-only and runs as a dock page-script, UI in Solid + UnoCSS:
    `host.ts` (single shadow host + inlined `<style>`) → `frameworks.ts` (element description) →
    `hub.ts` (hub base from the served module URL) → `ui/` chrome (`Pill` — one icon anchored
    bottom-left at `left-14`, clear of the hub's 40 px rail, `QuickComposer` — inline body, `@`
    route mention list, clickable start chips, Pins toggle and hub link, `Panel` shell, `Pins`
    annotations + bubbles refreshed from the 5s poll, `ChatPill` + `ChatPanel` — the Lovable-style
-   chat surface) plus the shared `src/ui/` components →
+   chat surface) plus the shared `src/ui/shared/` components →
    `main.tsx` (`mountOverlay()` + guarded self-call, panel surface via `connectPanelApi()`).
    There is no element picker/inspector mode: the composer targets a route (`@` mention or the
    current path) and the target element is captured once when the icon opens. Pins stay
@@ -110,7 +110,7 @@ to an agent CLI. Agents must be able to follow this file end to end without gues
    `WRIKKA_DEVTOOLS_ROLE`) is resolved once in `createDevframeDefinition` via `setRole`; every
    mutating RPC calls `assertCan` from `src/core/access.ts` and `get-meta` reports the role plus
    `capabilities`, which the overlay and the client use to disable writes.
-7. Dock panels are one client SPA: `src/client/main.tsx` switches on `location.hash` and
+7. Dock panels are one client SPA: `src/ui/client/main.tsx` switches on `location.hash` and
    `registerPanelDocks` frames each at `${frameBase}#/<id>`, so the hash must equal the dock id
    (`FRAME_ID = 'wrikka-vite-devtools'`, hence `<base>wrikka-vite-devtools/#/<id>` is a direct link).
    `#/home` is registered first and is the landing surface; the Comments panel is the frame root
@@ -151,23 +151,23 @@ to an agent CLI. Agents must be able to follow this file end to end without gues
   under `<base><id>/__page-script/` (the devframe's own base, not the hub base) — so the overlay
   bundle must be ONE fully self-contained file: `vite.overlay.config.ts` builds a lib with
   `codeSplitting: false`, and `scripts/inline-overlay-css.ts` replaces the `__OVERLAY_CSS_TOKEN__`
-  string in `src/overlay/css.ts` with the emitted stylesheet and deletes the sibling `.css` asset
+  string in `src/ui/overlay/css.ts` with the emitted stylesheet and deletes the sibling `.css` asset
   (a sibling asset would 404).
 - UnoCSS `presetWind4` defaults its colour/shadow vars via `@property` — ignored inside shadow
   roots — so `inline-overlay-css.ts` rewrites every `@property` into a
   `*,::before,::after{--name:initial-value}` fallback and keeps the preflight reset disabled
   (the host page must never be reset).
 - The dock executor imports that URL and calls `mod[importName ?? 'default']`, so
-  `src/overlay/main.tsx` must export a **callable default**; it also self-calls, and both paths
+  `src/ui/overlay/main.tsx` must export a **callable default**; it also self-calls, and both paths
   share the `window.__WRIKKA_VITE_DEVTOOLS_OVERLAY__` guard (`{ openChat, closeChat }` — keep it
   truthy and callable-safe for the dock executor). A side-effect-only module logs
   `exports no callable "default"`.
 - `tsdown` `clean: true` deletes `dist/` — the `build` script order is load-bearing; never add a
   script that builds `client` before `pkg`.
 - `devframe.ts` resolves `dist/overlay/index.mjs` at runtime, so the overlay entry name is fixed.
-- The overlay mirrors protocol types in plain TS (`src/overlay/api.ts`) instead of importing `zod` —
+- The overlay mirrors protocol types in plain TS (`src/ui/overlay/api.ts`) instead of importing `zod` —
   keep the browser bundle free of the server validator.
-- The frame client (`src/client/`) is the hub-side SPA (Home, Comments, Canvas and the 17 audit panels,
+- The frame client (`src/ui/client/`) is the hub-side SPA (Home, Comments, Canvas and the 17 audit panels,
   UnoCSS `presetWind4`, no shortcuts). Its vite build must keep `base: './'`, the explicit
   `UnoCSS(resolve(import.meta.dirname, 'uno.config.ts'))` path, and a `content.pipeline.include`
   matching plain `.ts` — each of the three fails silently otherwise (404 assets / default config /

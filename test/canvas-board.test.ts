@@ -19,7 +19,7 @@ import {
   zoomAt,
   type ComponentInput,
   type RouteInput,
-} from '../src/client/canvas-board'
+} from '../src/ui/client/canvas-board'
 
 const route = (path: string, over: Partial<RouteInput> = {}): RouteInput => ({
   path,

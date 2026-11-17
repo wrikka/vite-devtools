@@ -28,7 +28,7 @@
     "README.md"
   ],
   "scripts": {
-    "build:client": "vite build src/client",
+    "build:client": "vite build src/ui/client",
     "build:pkg": "tsdown",
     "build:overlay": "vite build -c vite.overlay.config.ts && bun scripts/inline-overlay-css.ts",
     "build": "bun run build:pkg && bun run build:overlay && bun run build:client",
