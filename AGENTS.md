@@ -127,7 +127,7 @@ to an agent CLI. Agents must be able to follow this file end to end without gues
 
 1. `/git-commit-and-push` here → CI publishes a pkg.pr.new preview for the new sha.
 2. Consume it in the host app (e.g. buuyook):
-   `bun add -D wrikka-vite-devtools@https://pkg.pr.new/wrikka/vite-devtools@<sha>` and place `useWrikkaViteDevtools()`
+   `bun add -D wrikka-vite-devtools@https://pkg.pr.new/wrikka/vite-devtools/wrikka-vite-devtools@<sha>` and place `useWrikkaViteDevtools()`
    **before** framework plugins in `vite.config.ts`, then restart the dev server.
 3. Bump the gitlink in the parent `wrikka/packages` repo after the commit lands.
 
