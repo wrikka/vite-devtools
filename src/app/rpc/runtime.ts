@@ -1,94 +1,21 @@
 import { defineRpcFunction } from 'devframe'
 import { z } from 'zod'
-import { devServerOrigin } from '../../infra/vite-server-context'
-import { assertLocalOrigin } from './seo'
+import {
+  RUNTIME_KINDS,
+  clearEvents,
+  pushEvents,
+  readEvents,
+  replayRequest as replay,
+  ringStats,
+} from '../../modules/runtime'
+import type { RuntimeEvent } from '../../modules/runtime'
+import { localPageFetcher } from '../../infra/local-page-fetcher'
+import { viteServerContext } from '../../infra/vite-server-context'
 
-const KINDS = ['network', 'console', 'vital', 'state'] as const
-type RuntimeKind = (typeof KINDS)[number]
-
-/** Events older than this memory budget are dropped even when the ring is not full. */
-const RING_LIMITS: Record<RuntimeKind, number> = {
-  network: 300,
-  console: 500,
-  vital: 200,
-  state: 50,
-}
+export { pushEvents, readEvents, clearEvents }
+export type { RuntimeEvent }
 
 const MAX_BATCH = 50
-const REPLAY_TIMEOUT_MS = 8_000
-const MAX_BODY_PREVIEW = 4_096
-
-export interface RuntimeEvent {
-  id: number
-  kind: RuntimeKind
-  at: number
-  data: Record<string, unknown>
-}
-
-interface RingBuffer {
-  events: RuntimeEvent[]
-  total: number
-  dropped: number
-}
-
-const buffers = new Map<RuntimeKind, RingBuffer>()
-let nextId = 1
-
-function bufferOf(kind: RuntimeKind): RingBuffer {
-  let ring = buffers.get(kind)
-  if (!ring) {
-    ring = { events: [], total: 0, dropped: 0 }
-    buffers.set(kind, ring)
-  }
-  return ring
-}
-
-/** Exported for unit tests: the ring cap and drop counter are the whole retention policy. */
-export function pushEvents(
-  incoming: { kind: RuntimeKind; at?: number; data: Record<string, unknown> }[],
-): { accepted: number; dropped: number } {
-  let accepted = 0
-  let dropped = 0
-  for (const event of incoming) {
-    const ring = bufferOf(event.kind)
-    ring.events.push({ id: nextId++, kind: event.kind, at: event.at ?? Date.now(), data: event.data })
-    ring.total += 1
-    accepted += 1
-    while (ring.events.length > RING_LIMITS[event.kind]) {
-      ring.events.shift()
-      ring.dropped += 1
-      dropped += 1
-    }
-  }
-  return { accepted, dropped }
-}
-
-export function readEvents(kind?: RuntimeKind, since?: number, limit = 500): RuntimeEvent[] {
-  const kinds = kind ? [kind] : [...KINDS]
-  const merged: RuntimeEvent[] = []
-  for (const k of kinds) {
-    for (const event of bufferOf(k).events) {
-      if (since !== undefined && event.at <= since) continue
-      merged.push(event)
-    }
-  }
-  merged.sort((a, b) => b.at - a.at || b.id - a.id)
-  return merged.slice(0, Math.max(1, Math.min(limit, 2000)))
-}
-
-export function clearEvents(kind?: RuntimeKind): number {
-  let cleared = 0
-  for (const k of kind ? [kind] : [...KINDS]) {
-    const ring = bufferOf(k)
-    cleared += ring.events.length
-    ring.events = []
-  }
-  return cleared
-}
-
-function localBase(): string {
-  return devServerOrigin('/') ?? 'http://localhost:5173/'
-}
 
 export function createRuntimeRpc() {
   const pushRuntimeEvent = defineRpcFunction({
@@ -100,7 +27,7 @@ export function createRuntimeRpc() {
         events: z
           .array(
             z.object({
-              kind: z.enum(KINDS),
+              kind: z.enum(RUNTIME_KINDS),
               at: z.number().optional(),
               data: z.record(z.string(), z.unknown()),
             }),
@@ -122,7 +49,7 @@ export function createRuntimeRpc() {
     jsonSerializable: true,
     args: [
       z.object({
-        kind: z.enum(KINDS).optional(),
+        kind: z.enum(RUNTIME_KINDS).optional(),
         since: z.number().optional(),
         limit: z.number().optional(),
       }),
@@ -139,27 +66,20 @@ export function createRuntimeRpc() {
       events: z.array(
         z.object({
           id: z.number(),
-          kind: z.enum(KINDS),
+          kind: z.enum(RUNTIME_KINDS),
           at: z.number(),
           data: z.record(z.string(), z.unknown()),
         }),
       ),
     }),
-    handler: ({ kind, since, limit }) => {
-      const kinds: Record<string, { total: number; kept: number; dropped: number }> = {}
-      for (const k of KINDS) {
-        const ring = bufferOf(k)
-        kinds[k] = { total: ring.total, kept: ring.events.length, dropped: ring.dropped }
-      }
-      return { kinds, events: readEvents(kind, since, limit ?? 500) }
-    },
+    handler: ({ kind, since, limit }) => ({ kinds: ringStats(), events: readEvents(kind, since, limit ?? 500) }),
   })
 
   const clearRuntime = defineRpcFunction({
     name: 'clear-runtime',
     type: 'action',
     jsonSerializable: true,
-    args: [z.object({ kind: z.enum(KINDS).optional() })],
+    args: [z.object({ kind: z.enum(RUNTIME_KINDS).optional() })],
     agent: {
       description: 'Drop captured runtime events from the ring buffers (all kinds, or one kind)',
     },
@@ -192,48 +112,8 @@ export function createRuntimeRpc() {
       truncated: z.boolean(),
       error: z.string().optional(),
     }),
-    handler: async ({ url, method, headers, body }) => {
-      const startedAt = Date.now()
-      const fail = (error: string, target = '') => ({
-        ok: false,
-        status: 0,
-        durationMs: Date.now() - startedAt,
-        headers: [],
-        body: '',
-        truncated: false,
-        error: `${target}${target ? ': ' : ''}${error}`,
-      })
-      const raw = url.trim()
-      let target: URL
-      try {
-        target = assertLocalOrigin(raw || localBase())
-      } catch (err) {
-        return fail(err instanceof Error ? err.message : String(err), raw)
-      }
-      try {
-        const res = await fetch(target, {
-          method: (method ?? 'GET').toUpperCase(),
-          headers,
-          body: body && method && method.toUpperCase() !== 'GET' ? body : undefined,
-          redirect: 'follow',
-          signal: AbortSignal.timeout(REPLAY_TIMEOUT_MS),
-        })
-        const seen: { name: string; value: string }[] = []
-        res.headers.forEach((value, name) => void seen.push({ name, value }))
-        seen.sort((a, b) => a.name.localeCompare(b.name))
-        const text = await res.text()
-        return {
-          ok: res.ok,
-          status: res.status,
-          durationMs: Date.now() - startedAt,
-          headers: seen,
-          body: text.slice(0, MAX_BODY_PREVIEW),
-          truncated: text.length > MAX_BODY_PREVIEW,
-        }
-      } catch (err) {
-        return fail(err instanceof Error ? err.message : String(err), target.toString())
-      }
-    },
+    handler: async ({ url, method, headers, body }) =>
+      replay(localPageFetcher, viteServerContext, { url, method, headers, body }),
   })
 
   return { pushRuntimeEvent, getRuntime, clearRuntime, replayRequest }
