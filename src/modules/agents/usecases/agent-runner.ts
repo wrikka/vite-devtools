@@ -1,7 +1,7 @@
 import type { DriverPreference } from '../../../contracts/agents'
 import { buildCommentPrompt } from '../../../core/prompts'
 import type { CommentStore } from '../../../core/ports/comment-store'
-import type { AgentDriverPort } from '../ports/agent-driver'
+import type { AgentDriverPort } from '../../../core/ports/agent-driver'
 import type { LogsChannel } from '../ports/logs-channel'
 
 export interface AgentRunnerDeps {

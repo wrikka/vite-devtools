@@ -1,6 +1,6 @@
 import { spawn, spawnSync } from 'node:child_process'
 import type { AgentDriver, DriverPreference } from '../contracts/agents'
-import type { AgentDriverPort, RunOptions, RunResult } from '../modules/agents'
+import type { AgentDriverPort, RunOptions, RunResult } from '../core/ports/agent-driver'
 
 const DRIVERS: AgentDriver[] = ['claude', 'codex', 'opencode']
 

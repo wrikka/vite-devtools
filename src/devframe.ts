@@ -110,7 +110,7 @@ export function createDevframeDefinition(options: DevframeOptions = {}) {
       })
       const skills = createSkillsRpc({ roots: options.skillsRoots ?? defaultSkillRoots() })
       const capture = createCaptureRpc({ storageDir })
-      const ideas = createIdeasRpc({ preference })
+      const ideas = createIdeasRpc({ preference, driver: cliAgentDriver })
       const mcp = createMcpRpc()
       const headers = createHeadersRpc()
       const runtime = createRuntimeRpc()

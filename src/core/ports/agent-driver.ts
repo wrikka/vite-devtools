@@ -1,4 +1,4 @@
-import type { AgentDriver, DriverPreference } from '../../../contracts/agents'
+import type { AgentDriver, DriverPreference } from '../../contracts/agents'
 
 export interface RunOptions {
   cwd: string
