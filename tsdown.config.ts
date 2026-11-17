@@ -5,7 +5,7 @@ export default defineConfig({
     index: 'src/index.ts',
     vite: 'src/vite.ts',
     devframe: 'src/devframe.ts',
-    rpc: 'src/rpc/index.ts',
+    rpc: 'src/app/rpc/index.ts',
   },
   format: ['esm'],
   dts: true,

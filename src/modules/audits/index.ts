@@ -8,3 +8,5 @@ export { auditImports, relativeImports, exportedIdentifiers, resolveRelative } f
 export type { ImportsAuditReport } from './usecases/audit-imports'
 export { auditBundle, findCycles } from './usecases/audit-bundle'
 export type { BundleReport, GraphNode, ModuleGraph } from './usecases/audit-bundle'
+export { auditTheme } from './usecases/audit-theme'
+export type { ThemeAuditReport, UtilityKind, UtilityRow } from './usecases/audit-theme'
