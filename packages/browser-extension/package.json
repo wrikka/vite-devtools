@@ -6,7 +6,7 @@
   "description": "Wrikka Devtools Companion — detects wrikka-vite-devtools on local dev servers and assists setup",
   "scripts": {
     "build": "vite build && vite build -c vite.content.config.ts",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsrs --noEmit",
     "package": "bun run build"
   },
   "devDependencies": {}
