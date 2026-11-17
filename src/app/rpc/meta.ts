@@ -1,14 +1,10 @@
-import { readdir, stat } from 'node:fs/promises'
-import { join, resolve } from 'node:path'
 import { defineRpcFunction } from 'devframe'
 import { z } from 'zod'
-import pkg from '../../../package.json'
 import { RoleSchema } from '../../contracts/protocol'
-import { capabilities, currentRole } from '../../core/access'
-import { projectContext } from '../../infra/vite-server-context'
-
-const MAX_ENTRIES = 200
-const DEFAULT_LIMIT = 50
+import { getMeta as readMeta, scanDir as readDir } from '../../modules/scans'
+import type { MetaReport } from '../../modules/scans'
+import { viteServerContext } from '../../infra/vite-server-context'
+import pkg from '../../../package.json'
 
 const DirEntrySchema = z.object({
   name: z.string(),
@@ -33,16 +29,7 @@ export const getMeta = defineRpcFunction({
     /** Host Vite base (`/` unless the app sets one) — Canvas previews join routes onto it. */
     hostBase: z.string(),
   }),
-  handler: async () => ({
-    tool: pkg.name,
-    version: pkg.version,
-    platform: `${process.platform} ${process.arch}`,
-    cwd: process.cwd(),
-    generatedAt: new Date().toISOString(),
-    role: currentRole(),
-    capabilities: capabilities(),
-    hostBase: projectContext.hostBase ?? '/',
-  }),
+  handler: async (): Promise<MetaReport> => readMeta(viteServerContext, pkg),
 })
 
 export const scanDir = defineRpcFunction({
@@ -55,26 +42,5 @@ export const scanDir = defineRpcFunction({
     entries: z.array(DirEntrySchema),
     truncated: z.boolean(),
   }),
-  handler: async ({ path = '.', limit = DEFAULT_LIMIT }) => {
-    const dir = resolve(process.cwd(), path)
-    const dirents = await readdir(dir, { withFileTypes: true })
-    const capped = dirents.slice(0, Math.min(limit, MAX_ENTRIES))
-    const entries = await Promise.all(
-      capped.map(async (d) => {
-        let size: number | null = null
-        try {
-          if (d.isFile()) size = (await stat(join(dir, d.name))).size
-        } catch {
-          size = null
-        }
-        const kind: 'dir' | 'file' | 'other' = d.isDirectory()
-          ? 'dir'
-          : d.isFile()
-            ? 'file'
-            : 'other'
-        return { name: d.name, kind, size }
-      }),
-    )
-    return { dir, entries, truncated: dirents.length > capped.length }
-  },
+  handler: async ({ path = '.', limit = 50 }) => readDir(path, limit),
 })

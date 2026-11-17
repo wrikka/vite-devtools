@@ -1,22 +1,12 @@
 import { readdir, readFile, stat } from 'node:fs/promises'
 import { join, relative, resolve, sep } from 'node:path'
+import { CODE_EXT, WEB_EXT } from '../../contracts/source-scan'
+import type { ScanOptions, SourceFile, SourceScan } from '../../contracts/source-scan'
+import type { SourceScanner } from '../../core/ports/source-scanner'
 import { projectRoot } from '../vite-server-context'
 
-export const CODE_EXT = new Set([
-  '.ts',
-  '.tsx',
-  '.js',
-  '.jsx',
-  '.mjs',
-  '.cjs',
-  '.mts',
-  '.cts',
-  '.vue',
-  '.svelte',
-  '.astro',
-])
-
-export const WEB_EXT = new Set([...CODE_EXT, '.html', '.css', '.scss'])
+export { CODE_EXT, WEB_EXT }
+export type { ScanOptions, SourceFile, SourceScan }
 
 const IGNORED_DIRS = new Set([
   'node_modules',
@@ -38,29 +28,6 @@ const IGNORED_DIRS = new Set([
   'vendor',
   'target',
 ])
-
-export interface SourceFile {
-  /** Project-relative path, posix separators. */
-  rel: string
-  full: string
-  text: string
-}
-
-export interface SourceScan {
-  root: string
-  /** Directory the walk started from, project-relative. */
-  dir: string
-  files: SourceFile[]
-  truncated: boolean
-}
-
-export interface ScanOptions {
-  /** Project-relative sub-directory; defaults to the project root. */
-  dir?: string
-  exts?: Set<string>
-  maxFiles?: number
-  maxFileSize?: number
-}
 
 /** Walk the served project once; every audit panel reads from this. */
 export async function scanSource(options: ScanOptions = {}): Promise<SourceScan> {
@@ -110,18 +77,4 @@ export async function scanSource(options: ScanOptions = {}): Promise<SourceScan>
   return { root, dir, files, truncated }
 }
 
-export function relFromRoot(root: string, full: string): string {
-  return relative(root, full).split(sep).join('/')
-}
-
-/** Guard every path an RPC takes from the client. */
-export function isInside(root: string, target: string): boolean {
-  const r = resolve(root)
-  const t = resolve(target)
-  return t === r || t.startsWith(r.endsWith(sep) ? r : `${r}${sep}`)
-}
-
-export function extOf(name: string): string {
-  const dot = name.lastIndexOf('.')
-  return dot === -1 ? '' : name.slice(dot)
-}
+export const sourceScanner: SourceScanner = { scan: scanSource }

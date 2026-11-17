@@ -16,6 +16,15 @@ export interface ProjectContext {
 
 export const projectContext: ProjectContext = {}
 
+import type { ViteServerContext } from '../core/ports/vite-server'
+
+/** Port impl: reads the mutable `projectContext` the plugin fills in. */
+export const viteServerContext: ViteServerContext = {
+  root: projectRoot,
+  origin: (path = '/') => devServerOrigin(path),
+  hostBase: () => projectContext.hostBase ?? '/',
+}
+
 export function projectRoot(): string {
   return projectContext.root ?? process.cwd()
 }

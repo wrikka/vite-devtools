@@ -1,7 +1,7 @@
 import type { RpcDefinitionsToFunctionsWithNamespace } from 'devframe/types'
 import type { getMeta, scanDir } from '../rpc'
 import type { listComponents, listRoutes, auditSeo } from '../rpc'
-import type { createCommentRpc } from '../rpc/comments'
+import type { createCommentRpc } from '../app/rpc/comments'
 import type { createAgentRpc } from '../app/rpc/agents'
 import type { createSkillsRpc } from '../app/rpc/skills'
 import type { createCaptureRpc } from '../app/rpc/capture'
