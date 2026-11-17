@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test'
 import { mergeSeo } from '../src/client/mergeSeo'
-import type { RouteRow } from '../src/rpc/routes'
-import type { SeoRow } from '../src/rpc/seo'
+import type { RouteRow } from '../src/app/rpc/routes'
+import type { SeoRow } from '../src/app/rpc/seo'
 
 function route(path: string, params: string[] = []): RouteRow {
   return {

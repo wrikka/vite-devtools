@@ -1,6 +1,6 @@
 import { defineRpcFunction } from 'devframe'
 import { z } from 'zod'
-import { CODE_EXT, scanSource } from '../infra/scanners/source-scanner'
+import { CODE_EXT, scanSource } from '../../infra/scanners/source-scanner'
 
 const LOCALE_DIR = /(^|\/)(locales?|i18n|lang|langs|messages|translations)\//i
 

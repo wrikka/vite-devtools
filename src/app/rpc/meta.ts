@@ -2,10 +2,10 @@ import { readdir, stat } from 'node:fs/promises'
 import { join, resolve } from 'node:path'
 import { defineRpcFunction } from 'devframe'
 import { z } from 'zod'
-import pkg from '../../package.json'
-import { RoleSchema } from '../contracts/protocol'
-import { capabilities, currentRole } from '../core/access'
-import { projectContext } from '../infra/vite-server-context'
+import pkg from '../../../package.json'
+import { RoleSchema } from '../../contracts/protocol'
+import { capabilities, currentRole } from '../../core/access'
+import { projectContext } from '../../infra/vite-server-context'
 
 const MAX_ENTRIES = 200
 const DEFAULT_LIMIT = 50

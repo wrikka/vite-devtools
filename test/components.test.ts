@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { exportedNames, kindOf } from '../src/rpc/components'
+import { exportedNames, kindOf } from '../src/app/rpc/components'
 
 describe('exportedNames', () => {
   it('collects PascalCase function, const and default exports', () => {

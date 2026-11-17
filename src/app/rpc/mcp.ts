@@ -1,7 +1,7 @@
 import { defineRpcFunction } from 'devframe'
 import { z } from 'zod'
-import { devServerOrigin, projectContext } from '../infra/vite-server-context'
-import { assertCan } from '../core/access'
+import { devServerOrigin, projectContext } from '../../infra/vite-server-context'
+import { assertCan } from '../../core/access'
 
 const REQUEST_TIMEOUT_MS = 20_000
 const MAX_RESULT_CHARS = 40_000

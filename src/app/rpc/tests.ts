@@ -3,9 +3,9 @@ import { stat } from 'node:fs/promises'
 import { join } from 'node:path'
 import { defineRpcFunction } from 'devframe'
 import { z } from 'zod'
-import { projectRoot } from '../infra/vite-server-context'
-import { assertCan } from '../core/access'
-import { CODE_EXT, isInside, scanSource } from '../infra/scanners/source-scanner'
+import { projectRoot } from '../../infra/vite-server-context'
+import { assertCan } from '../../core/access'
+import { CODE_EXT, isInside, scanSource } from '../../infra/scanners/source-scanner'
 
 const TEST_FILE = /\.(test|spec)\.[cm]?[jt]sx?$/
 const SOURCE_EXT = ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.vue', '.svelte', '.astro']

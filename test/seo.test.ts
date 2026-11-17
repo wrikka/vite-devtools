@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'bun:test'
-import { assertLocalOrigin, decodeEntities, judge, metaByPrefix } from '../src/rpc/seo'
-import type { SeoRow } from '../src/rpc/seo'
+import { assertLocalOrigin, decodeEntities, judge, metaByPrefix } from '../src/app/rpc/seo'
+import type { SeoRow } from '../src/app/rpc/seo'
 
 const clean = {
   path: '/',

@@ -1,6 +1,6 @@
 import { defineRpcFunction } from 'devframe'
 import { z } from 'zod'
-import { devServerOrigin } from '../infra/vite-server-context'
+import { devServerOrigin } from '../../infra/vite-server-context'
 import { assertLocalOrigin } from './seo'
 
 const KINDS = ['network', 'console', 'vital', 'state'] as const

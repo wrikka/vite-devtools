@@ -1,6 +1,6 @@
 import { For, Show, createMemo, createSignal, onMount } from 'solid-js'
-import type { RoutesReport } from '../rpc/routes'
-import type { SeoReport, SeoRow } from '../rpc/seo'
+import type { RoutesReport } from '../app/rpc/routes'
+import type { SeoReport, SeoRow } from '../app/rpc/seo'
 import type { PanelApi } from '../ui/api'
 import {
   btn,

@@ -2,10 +2,10 @@ import type { RpcDefinitionsToFunctionsWithNamespace } from 'devframe/types'
 import type { getMeta, scanDir } from '../rpc'
 import type { listComponents, listRoutes, auditSeo } from '../rpc'
 import type { createCommentRpc } from '../rpc/comments'
-import type { createAgentRpc } from '../rpc/agents'
-import type { createSkillsRpc } from '../rpc/skills'
-import type { createCaptureRpc } from '../rpc/capture'
-import type { createIdeasRpc } from '../rpc/ideas'
+import type { createAgentRpc } from '../app/rpc/agents'
+import type { createSkillsRpc } from '../app/rpc/skills'
+import type { createCaptureRpc } from '../app/rpc/capture'
+import type { createIdeasRpc } from '../app/rpc/ideas'
 
 type CommentDefs = ReturnType<typeof createCommentRpc>
 type AgentDefs = ReturnType<typeof createAgentRpc>

@@ -9,7 +9,7 @@ import {
   flattenObjectKeys,
   paletteModules,
   themeTokens,
-} from '../src/rpc/theme-audit'
+} from '../src/app/rpc/theme-audit'
 import type { SourceFile } from '../src/infra/scanners/source-scanner'
 
 const TOKENS = new Set(['surface', 'surface-raised', 'ink', 'ink-muted', 'accent', 'accent-soft'])

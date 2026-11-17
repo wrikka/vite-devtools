@@ -1,5 +1,5 @@
-import type { RouteRow } from '../rpc/routes'
-import type { SeoRow } from '../rpc/seo'
+import type { RouteRow } from '../app/rpc/routes'
+import type { SeoRow } from '../app/rpc/seo'
 
 /**
  * Audited served html keyed by the route it belongs to.

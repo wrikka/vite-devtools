@@ -1,6 +1,6 @@
 import { For, Show, createMemo, createSignal, onMount } from 'solid-js'
-import type { ComponentsReport } from '../rpc/components'
-import type { RoutesReport } from '../rpc/routes'
+import type { ComponentsReport } from '../app/rpc/components'
+import type { RoutesReport } from '../app/rpc/routes'
 import type { PanelApi } from '../ui/api'
 import { btn, hint, page, pageHead, title } from '../ui/bits'
 import CanvasFrame from './CanvasFrame'

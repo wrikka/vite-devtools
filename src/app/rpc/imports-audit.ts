@@ -1,7 +1,7 @@
 import { posix } from 'node:path'
 import { defineRpcFunction } from 'devframe'
 import { z } from 'zod'
-import { CODE_EXT, scanSource, type SourceFile } from '../infra/scanners/source-scanner'
+import { CODE_EXT, scanSource, type SourceFile } from '../../infra/scanners/source-scanner'
 
 const RESOLVE_EXT = ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.mts', '.cts', '.vue', '.svelte', '.astro', '.json']
 

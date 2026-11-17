@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { kindFromFile, parseRoute, pathFromFile } from '../src/rpc/routes'
+import { kindFromFile, parseRoute, pathFromFile } from '../src/app/rpc/routes'
 
 describe('pathFromFile', () => {
   it('derives a path from the folder tail', () => {
