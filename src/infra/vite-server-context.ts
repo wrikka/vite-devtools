@@ -23,6 +23,10 @@ export const viteServerContext: ViteServerContext = {
   root: projectRoot,
   origin: (path = '/') => devServerOrigin(path),
   hostBase: () => projectContext.hostBase ?? '/',
+  clientModuleGraph: () => {
+    const server = projectContext.server as any
+    return server?.environments?.client?.moduleGraph ?? server?.moduleGraph
+  },
 }
 
 export function projectRoot(): string {

@@ -4,3 +4,7 @@ export { auditEnv, envRefs, parseEnvKeys, isSecretName } from './usecases/audit-
 export type { EnvAuditReport, EnvRefRow } from './usecases/audit-env'
 export { auditI18n, flattenJson, tCallKeys, hardcodedCopy } from './usecases/audit-i18n'
 export type { I18nAuditReport, LocaleRow } from './usecases/audit-i18n'
+export { auditImports, relativeImports, exportedIdentifiers, resolveRelative } from './usecases/audit-imports'
+export type { ImportsAuditReport } from './usecases/audit-imports'
+export { auditBundle, findCycles } from './usecases/audit-bundle'
+export type { BundleReport, GraphNode, ModuleGraph } from './usecases/audit-bundle'

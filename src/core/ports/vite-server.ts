@@ -6,4 +6,6 @@ export interface ViteServerContext {
   origin(path?: string): string | undefined
   /** Host Vite `base` (`/` unless the app sets one). */
   hostBase(): string
+  /** Vite client module graph for the bundle audit; undefined when no dev server is attached. */
+  clientModuleGraph(): unknown
 }
