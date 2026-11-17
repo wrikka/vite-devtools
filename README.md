@@ -27,7 +27,7 @@ as a **single Vite plugin** — add `useWrikkaViteDevtools()` to `vite.config.ts
 1. Install — previews ship from pkg.pr.new (the package is not on npm):
 
    ```bash
-   bun add -D "wrikka-vite-devtools@https://pkg.pr.new/wrikka/wrikka-vite-devtools@<ref>"
+   bun add -D "wrikka-vite-devtools@https://pkg.pr.new/wrikka/vite-devtools@<ref>"
    ```
 
 2. Add the plugin — it must come **before** framework plugins that transform the HTML/SSR entry

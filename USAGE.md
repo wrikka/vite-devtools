@@ -8,7 +8,7 @@ comment→agent overlay. This file documents the real public surface, every RPC,
 Preview releases come from pkg.pr.new (the package is not on npm):
 
 ```bash
-bun add -D "wrikka-vite-devtools@https://pkg.pr.new/wrikka/wrikka-vite-devtools@<ref>"
+bun add -D "wrikka-vite-devtools@https://pkg.pr.new/wrikka/vite-devtools@<ref>"
 ```
 
 In `vite.config.ts` the plugin must be listed **before** framework plugins that transform the

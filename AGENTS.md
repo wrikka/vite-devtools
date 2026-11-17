@@ -34,7 +34,8 @@ to an agent CLI. Agents must be able to follow this file end to end without gues
 ### 1. Start Every Task
 
 1. Read this file and `USAGE.md`, then check `git status` — this repo is a git submodule of
-   `devin-skills`, so commit here first, then bump the gitlink in the parent.
+   `wrikka/packages` at `packages/plugins/vite-devtools` (GitHub: `wrikka/vite-devtools`), so commit
+   here first, then bump the gitlink in the parent.
 2. For mount/verify work in a host project use `/use-wrikka-vite-devtools`; for work on this repo itself use `/update-wrikka-vite-devtools`.
 3. Read `src/protocol.ts` before touching any RPC — schemas there are the single source of truth for
    both the server handlers and the overlay's plain-TS mirror (`src/overlay/api.ts`).
@@ -126,9 +127,9 @@ to an agent CLI. Agents must be able to follow this file end to end without gues
 
 1. `/git-commit-and-push` here → CI publishes a pkg.pr.new preview for the new sha.
 2. Consume it in the host app (e.g. buuyook):
-   `bun add -D wrikka-vite-devtools@https://pkg.pr.new/wrikka/wrikka-vite-devtools@<sha>` and place `useWrikkaViteDevtools()`
+   `bun add -D wrikka-vite-devtools@https://pkg.pr.new/wrikka/vite-devtools@<sha>` and place `useWrikkaViteDevtools()`
    **before** framework plugins in `vite.config.ts`, then restart the dev server.
-3. Update the parent `devin-skills` submodule pointer after the commit lands.
+3. Bump the gitlink in the parent `wrikka/packages` repo after the commit lands.
 
 ## Rules
 
