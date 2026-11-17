@@ -9,15 +9,15 @@ import {
   ringStats,
 } from '../../modules/runtime'
 import type { RuntimeEvent } from '../../modules/runtime'
-import { localPageFetcher } from '../../infra/local-page-fetcher'
-import { viteServerContext } from '../../infra/vite-server-context'
+import type { PageFetcher } from '../../core/ports/page-fetcher'
+import type { ViteServerContext } from '../../core/ports/vite-server'
 
 export { pushEvents, readEvents, clearEvents }
 export type { RuntimeEvent }
 
 const MAX_BATCH = 50
 
-export function createRuntimeRpc() {
+export function createRuntimeRpc(deps: { fetcher: PageFetcher; server: ViteServerContext }) {
   const pushRuntimeEvent = defineRpcFunction({
     name: 'push-runtime-event',
     type: 'action',
@@ -113,7 +113,7 @@ export function createRuntimeRpc() {
       error: z.string().optional(),
     }),
     handler: async ({ url, method, headers, body }) =>
-      replay(localPageFetcher, viteServerContext, { url, method, headers, body }),
+      replay(deps.fetcher, deps.server, { url, method, headers, body }),
   })
 
   return { pushRuntimeEvent, getRuntime, clearRuntime, replayRequest }

@@ -17,6 +17,7 @@ import { auditImports } from './app/rpc/imports-audit'
 import { createMcpRpc } from './app/rpc/mcp'
 import { createRuntimeRpc } from './app/rpc/runtime'
 import { createSkillsRpc } from './app/rpc/skills'
+import { infraDeps } from './app/infra'
 import { getMeta, scanDir } from './app/rpc/meta'
 import { searchSource } from './app/rpc/search'
 import { listComponents } from './app/rpc/components'
@@ -109,12 +110,12 @@ export function createDevframeDefinition(options: DevframeOptions = {}) {
           if (autoRun && comment.kind === 'comment') void agents.run(comment.id)
         },
       })
-      const skills = createSkillsRpc({ roots: options.skillsRoots ?? defaultSkillRoots() })
+      const skills = createSkillsRpc(infraDeps, { roots: options.skillsRoots ?? defaultSkillRoots() })
       const capture = createCaptureRpc({ store: new FsCaptureStore(storageDir) })
       const ideas = createIdeasRpc({ preference, driver: cliAgentDriver })
       const mcp = createMcpRpc()
-      const headers = createHeadersRpc()
-      const runtime = createRuntimeRpc()
+      const headers = createHeadersRpc(infraDeps)
+      const runtime = createRuntimeRpc(infraDeps)
 
       for (const fn of [
         comments.listComments,

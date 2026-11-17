@@ -1,13 +1,13 @@
 import { defineRpcFunction } from 'devframe'
 import { z } from 'zod'
 import { auditHeaders as runAudit } from '../../modules/audits/usecases/audit-headers'
-import { localPageFetcher } from '../../infra/local-page-fetcher'
-import { viteServerContext } from '../../infra/vite-server-context'
+import type { PageFetcher } from '../../core/ports/page-fetcher'
+import type { ViteServerContext } from '../../core/ports/vite-server'
 
 export { judgeHeaders, scoreChecks } from '../../modules/audits/usecases/audit-headers'
 export type { HeaderCheck, HeaderCheckStatus } from '../../modules/audits/usecases/audit-headers'
 
-export function createHeadersRpc() {
+export function createHeadersRpc(deps: { fetcher: PageFetcher; server: ViteServerContext }) {
   const auditHeaders = defineRpcFunction({
     name: 'audit-headers',
     type: 'query',
@@ -36,7 +36,7 @@ export function createHeadersRpc() {
       ),
       headers: z.array(z.object({ name: z.string(), value: z.string() })),
     }),
-    handler: async ({ url }) => runAudit(localPageFetcher, viteServerContext, url),
+    handler: async ({ url }) => runAudit(deps.fetcher, deps.server, url),
   })
 
   return { auditHeaders }
