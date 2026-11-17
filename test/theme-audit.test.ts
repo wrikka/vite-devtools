@@ -2,7 +2,9 @@ import { afterAll, describe, expect, it } from 'bun:test'
 import { mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { projectContext } from '../src/infra/vite-server-context'
+import { projectContext, viteServerContext } from '../src/infra/vite-server-context'
+import { nodeProjectFs } from '../src/infra/node-project-fs'
+import { sourceScanner } from '../src/infra/scanners/source-scanner'
 import {
   arbitraryIsColor,
   classifyColorUtility,
@@ -102,7 +104,7 @@ describe('paletteModules', () => {
       full: join(dir, 'src', 'uno.config.ts'),
       text: await Bun.file(join(dir, 'src', 'uno.config.ts')).text(),
     }
-    const extra = await paletteModules([config])
+    const extra = await paletteModules({ fs: nodeProjectFs, scanner: sourceScanner, server: viteServerContext }, [config])
 
     expect(extra.map((f) => f.rel)).toEqual(['src/theme.ts'])
     expect(themeTokens([config, ...extra])).toEqual(['ink', 'surface'])
