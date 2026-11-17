@@ -3,6 +3,7 @@ import { join, resolve } from 'node:path'
 import { defineDevframe } from 'devframe'
 import pkg from '../package.json'
 import { FsCommentStore } from './infra/fs-comment-store'
+import { FsCaptureStore } from './infra/fs-capture-store'
 import { cliAgentDriver } from './infra/cli-agent-driver'
 import { createAgentRpc } from './app/rpc/agents'
 import { auditBundle } from './app/rpc/bundle'
@@ -109,7 +110,7 @@ export function createDevframeDefinition(options: DevframeOptions = {}) {
         },
       })
       const skills = createSkillsRpc({ roots: options.skillsRoots ?? defaultSkillRoots() })
-      const capture = createCaptureRpc({ storageDir })
+      const capture = createCaptureRpc({ store: new FsCaptureStore(storageDir) })
       const ideas = createIdeasRpc({ preference, driver: cliAgentDriver })
       const mcp = createMcpRpc()
       const headers = createHeadersRpc()
