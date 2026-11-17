@@ -1,5 +1,5 @@
 import { For, Show, createMemo, createSignal, onMount } from 'solid-js'
-import type { ComponentRow, ComponentsReport } from '../../app/rpc/components'
+import type { ComponentRow, ComponentsReport } from '../../contracts/components'
 import type { PanelApi } from '../shared/api'
 import { btn, field, grid, hint, panelCard, row } from '../shared/bits'
 import { BarList } from '../shared/charts'

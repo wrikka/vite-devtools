@@ -2,7 +2,7 @@
   "name": "wrikka-vite-devtools",
   "version": "0.1.0",
   "type": "module",
-  "description": "Vite devtools hub as one plugin — 19 panels, aggregated MCP, and an in-page comment→agent overlay",
+  "description": "Vite devtools hub as one plugin \u2014 19 panels, aggregated MCP, and an in-page comment\u2192agent overlay",
   "homepage": "https://devfra.me",
   "license": "MIT",
   "workspaces": [
@@ -34,7 +34,8 @@
     "build": "bun run build:pkg && bun run build:overlay && bun run build:client",
     "playground": "bun run build && vite examples/playground --port 5199",
     "test": "bun test",
-    "typecheck": "bun check"
+    "typecheck": "bun check",
+    "check:deps": "bun scripts/check-deps.ts"
   },
   "peerDependencies": {
     "vite": ">=5"

@@ -1,6 +1,6 @@
 import { For, Show, createSignal } from 'solid-js'
-import type { RouteRow } from '../../app/rpc/routes'
-import type { SeoRow } from '../../app/rpc/seo'
+import type { RouteRow } from '../../contracts/routes'
+import type { SeoRow } from '../../contracts/seo'
 import type { PanelApi } from '../shared/api'
 import { btn, card, chip, hint, link, row, statusPill } from '../shared/bits'
 import SendToAgent from '../shared/SendToAgent'

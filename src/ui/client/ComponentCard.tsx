@@ -1,5 +1,5 @@
 import { For, Show } from 'solid-js'
-import type { ComponentRow } from '../../app/rpc/components'
+import type { ComponentRow } from '../../contracts/components'
 import type { PanelApi } from '../shared/api'
 import { chip, hint, kindTone, link, meter, meterTone, row, tile, tileOn, tonePill } from '../shared/bits'
 import SendToAgent from '../shared/SendToAgent'
